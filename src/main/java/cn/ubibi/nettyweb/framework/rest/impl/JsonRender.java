@@ -32,8 +32,8 @@ public class JsonRender implements ResponseRender {
 
         String jsonText = JSON.toJSONString(this.data);
 
-
         Charset charset = Config.getInstance().getCharset();
+
         byte[] CONTENT = jsonText.getBytes(charset);
 
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(CONTENT));
