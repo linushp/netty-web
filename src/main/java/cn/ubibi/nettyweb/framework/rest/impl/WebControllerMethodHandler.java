@@ -203,7 +203,7 @@ public class WebControllerMethodHandler implements WebRequestHandler{
                 object = controllerRequest.getRequestBodyObject(typeClazz);
             } else if (annotationType == PathVariable.class) {
                 PathVariable requestPath = (PathVariable) annotation;
-                String sw = controllerRequest.getPathVariable(requestPath.name());
+                String sw = controllerRequest.getPathVariable(requestPath.value());
                 object = CastTypeUtils.castValueType(sw, typeClazz);
             } else if (annotationType == AspectVariable.class) {
                 AspectVariable aspectVariable = (AspectVariable) annotation;
