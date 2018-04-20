@@ -8,7 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.util.AsciiString;
+import io.netty.handler.codec.http.HttpHeaderNames;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -20,10 +20,6 @@ public class WebServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private List<WebRequestHandler> webRequestHandlerList;
     private Executor executor;
-
-
-    private static final AsciiString CONTENT_TYPE = AsciiString.cached("Content-Type");
-    private static final AsciiString CONTENT_LENGTH = AsciiString.cached("Content-Length");
 
 
     public WebServerHandler(List<WebRequestHandler> webRequestHandlerList, Executor executor) {
@@ -75,8 +71,8 @@ public class WebServerHandler extends SimpleChannelInboundHandler<Object> {
     private FullHttpResponse get404Response() {
         byte[] CONTENT = "404 Page Not Found".getBytes();
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND, Unpooled.wrappedBuffer(CONTENT));
-        response.headers().set(CONTENT_TYPE, "text/plain");
-        response.headers().setInt(CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
+        response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
         return response;
     }
 

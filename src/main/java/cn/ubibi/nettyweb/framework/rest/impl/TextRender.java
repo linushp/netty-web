@@ -4,32 +4,30 @@ import cn.ubibi.nettyweb.framework.rest.ifs.ResponseRender;
 import cn.ubibi.nettyweb.framework.rest.model.Config;
 import cn.ubibi.nettyweb.framework.rest.model.ControllerRequest;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.util.AsciiString;
+import io.netty.handler.codec.http.HttpHeaderNames;
 
 import java.nio.charset.Charset;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-public class TextRender implements ResponseRender{
+public class TextRender implements ResponseRender {
 
-    private static final AsciiString CONTENT_TYPE = AsciiString.cached("Content-Type");
-    private static final AsciiString CONTENT_LENGTH = AsciiString.cached("Content-Length");
 
     private String text;
 
     public TextRender(String text) {
-        if (text == null){
+        if (text == null) {
             this.text = "null";
-        }else {
+        } else {
             this.text = text;
         }
     }
-
 
 
     @Override
@@ -41,12 +39,11 @@ public class TextRender implements ResponseRender{
         byte[] CONTENT = this.text.getBytes(charset);
 
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(CONTENT));
-        response.headers().set(CONTENT_TYPE, "text/html;charset="+charset.name());
-        response.headers().setInt(CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html;charset=" + charset.name());
+        response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
 
 
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
-
-
+        ChannelFuture future = ctx.writeAndFlush(response);
+        future.addListener(ChannelFutureListener.CLOSE);
     }
 }

@@ -3,12 +3,17 @@ package cn.ubibi.nettyweb.framework.rest.model;
 import cn.ubibi.nettyweb.framework.commons.StringWrapper;
 import cn.ubibi.nettyweb.framework.rest.utils.UriUtils;
 import com.alibaba.fastjson.JSON;
+import io.netty.handler.codec.http.Cookie;
+import io.netty.handler.codec.http.CookieDecoder;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.cookie.ClientCookieDecoder;
 
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.*;
+
+import static io.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 
 public class ControllerRequest {
 
@@ -21,6 +26,7 @@ public class ControllerRequest {
     private String uri;
     private String pathInfo;
     private Map<String, String> _pathVariable;
+    private Map<String,String> _cookies;
 
     public ControllerRequest(FullHttpRequest fullHttpRequest, String context, String targetPath) {
         this.fullHttpRequest = fullHttpRequest;
@@ -32,6 +38,9 @@ public class ControllerRequest {
         this.queryStringParameters = new QueryStringDecoder(uri,charset).parameters();
         this.aspectVariable = new HashMap<>();
     }
+
+
+
 
 
     public StringWrapper[] getRequestParams(String paramName) {
