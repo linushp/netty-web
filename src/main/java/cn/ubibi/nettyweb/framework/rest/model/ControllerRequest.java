@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class ControllerRequest {
@@ -27,7 +28,8 @@ public class ControllerRequest {
         this.targetPath = targetPath;
         this.uri = fullHttpRequest.uri();
         this.pathInfo = UriUtils.getPathInfo(uri);
-        this.queryStringParameters = new QueryStringDecoder(uri).parameters();
+        Charset charset = Config.getInstance().getCharset();
+        this.queryStringParameters = new QueryStringDecoder(uri,charset).parameters();
         this.aspectVariable = new HashMap<>();
     }
 
